@@ -1,0 +1,36 @@
+# Loop though Kibana_plugins and install them
+- name: Removing Plugins if they exist
+  action: >
+    shell bin/kibana plugin --remove "{{ item.shortname }}"
+    chdir="{{ kibana_dir }}"
+  with_items: kibana_plugins
+  ignore_errors: yes
+- name: Installing Plugins by Name
+  action: >
+    shell bin/kibana plugin --install "{{ item.name }}"
+    chdir="{{ kibana_dir }}"
+  with_items: kibana_plugins
+  when: item.file_install is not defined
+  ignore_errors: no
+
+
+- name: plugins | Ensure Paths for Download Plugins
+  file:
+    path="{{ kibana_dir }}/{{ item.shortname }}"
+    state=directory
+  when: item.file_install is defined and item.url is defined
+  with_items: kibana_plugins
+
+- name: plugins | Downloading Plugins for install by file
+  get_url:
+    url={{ item.url }}
+    dest={{ kibana_dir }}/{{ item.shortname }}/{{ item.url.split('/')[-1] }}
+  when: item.file_install is defined and item.url is defined
+  with_items: kibana_plugins
+
+- name: plugins | Install from File
+  action: >
+    shell bin/kibana plugin --install "{{ item.shortname }}" -u file:"{{ kibana_dir }}"/"{{ item.shortname }}"/"{{ item.url.split('/')[-1] }}"
+    chdir="{{ kibana_dir }}"
+  when: item.file_install is defined and item.url is defined
+  with_items: kibana_plugins
