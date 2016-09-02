@@ -11,6 +11,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vbguest.auto_update = true
   end
 
+  if Vagrant.has_plugin?('vagrant-proxyconf')
+    config.proxy.http = ENV['http_proxy']
+    config.proxy.https = ENV['https_proxy']
+  end
+
   config.vm.box = "ubuntu/trusty64"
   config.vm.network :forwarded_port, guest: 5601, host: 5601
   config.vm.network :forwarded_port, guest: 9200, host: 9200
@@ -27,6 +32,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.vmx["numvcpus"] = "2"
     v.vmx["memsize"] = "4096"
   end
+
+  config.vm.provision 'shell', inline: <<-SHELL
+    rm -vrf /var/lib/apt/lists/*
+    apt-get update
+    apt-get install -y git-core
+    git config --global url.'https://'.insteadOf git://
+  SHELL
+  
   config.vm.provision :shell,
     :keep_color => true,
     :path => "setup.sh"

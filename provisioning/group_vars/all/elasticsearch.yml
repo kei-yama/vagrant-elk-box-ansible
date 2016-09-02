@@ -1,7 +1,7 @@
 ---
 # Elasticsearch Ansible Sample Variables
 
-elasticsearch_version: 2.1.0
+elasticsearch_version: 2.3.5
 elasticsearch_network_host: 0.0.0.0
 # heap size should be set to half of total memory on instance
 elasticsearch_timezone: UTC
@@ -13,9 +13,11 @@ elasticsearch_node_name: ansible-es-1
 elasticsearch_apt_java_package: oracle-java8-installer
 elasticsearch_service_startonboot: yes
 elasticsearch_plugins:
-  - { name: 'royrusso/elasticsearch-HQ'}
+  - { name: "elasticsearch-HQ",
+      file_install: "true",
+      url: "https://github.com/royrusso/elasticsearch-HQ/archive/master.zip"}
 #  - { name: license }
-#- { name: marvel-agent }
+#  - { name: marvel-agent }
 
 
 #marvel
