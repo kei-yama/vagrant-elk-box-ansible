@@ -6,12 +6,12 @@
 
 - name: java | Update repositories
   apt_repository:
-    repo={{ item }}
+    repo='{{ item }}'
     state=present
     update_cache=yes
   with_items: elasticsearch_apt_repos
 
 - name: java | Install dependencies
   apt:
-    pkg={{elasticsearch_apt_java_package}}
+    pkg='{{elasticsearch_apt_java_package}}'
     state=present

@@ -1,8 +1,8 @@
-logstash_version: 2.3
+logstash_version: 2.4
 logstash_defaults: |
         LS_USER=root
         LS_GROUP=root
-        LS_HEAP_SIZE="256m"
+        LS_HEAP_SIZE="1024m"
 
 logstash_inputs: |
  file {

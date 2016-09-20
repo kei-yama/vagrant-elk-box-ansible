@@ -23,14 +23,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
   config.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--cpus", "2", "--memory", "4096"]
+      vb.customize ["modifyvm", :id, "--cpus", "2", "--memory", "6144"]
   end
 
   config.vm.provider "vmware_fusion" do |v, override|
      ## the puppetlabs ubuntu 14-04 image might work on vmware, not tested? 
     v.box = "phusion/ubuntu-14.04-amd64"
     v.vmx["numvcpus"] = "2"
-    v.vmx["memsize"] = "4096"
+    v.vmx["memsize"] = "6144"
   end
 
   config.vm.provision 'shell', inline: <<-SHELL
